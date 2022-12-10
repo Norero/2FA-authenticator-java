@@ -1,9 +1,9 @@
 package com.example.auth.google;
 
-import com.google.zxing.WriterException;
-
 import java.io.IOException;
 import java.util.Scanner;
+
+import com.google.zxing.WriterException;
 
 public class MainApplication {
 
