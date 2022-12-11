@@ -23,6 +23,8 @@ public class MainApplication {
 			System.out.println("Invalid 2FA Code");
 		}
 
+		scanner.close();
+
 	}
 
 }

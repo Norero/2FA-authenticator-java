@@ -36,9 +36,20 @@ public class Utils {
 
 	public static String getGoogleAuthenticatorBarCode(String secretKey, String account, String issuer) {
 		try {
-			return "otpauth://totp/" + URLEncoder.encode(issuer + ":" + account, "UTF-8").replace("+", "%20")
-					+ "?secret=" + URLEncoder.encode(secretKey, "UTF-8").replace("+", "%20") + "&issuer="
-					+ URLEncoder.encode(issuer, "UTF-8").replace("+", "%20");
+			String replace = URLEncoder.encode(issuer + ":" + account, "UTF-8").replace("+", "%20");
+			String replace2 = URLEncoder.encode(secretKey, "UTF-8").replace("+", "%20");
+			String replace3 = URLEncoder.encode(issuer, "UTF-8").replace("+", "%20");
+
+			StringBuilder stringBuilder = new StringBuilder();
+
+			stringBuilder.append("otpauth://totp/");
+			stringBuilder.append(replace);
+			stringBuilder.append("?secret=");
+			stringBuilder.append(replace2);
+			stringBuilder.append("&issuer=");
+			stringBuilder.append(replace3);
+			return stringBuilder.toString();
+
 		} catch (UnsupportedEncodingException e) {
 			throw new IllegalStateException(e);
 		}
@@ -46,7 +57,9 @@ public class Utils {
 
 	public static void createQRCode(String barCodeData, String filePath, int height, int width)
 			throws WriterException, IOException {
-		BitMatrix matrix = new MultiFormatWriter().encode(barCodeData, BarcodeFormat.QR_CODE, width, height);
+
+		MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+		BitMatrix matrix = multiFormatWriter.encode(barCodeData, BarcodeFormat.QR_CODE, width, height);
 		try (FileOutputStream out = new FileOutputStream(filePath)) {
 			MatrixToImageWriter.writeToStream(matrix, "png", out);
 		}
