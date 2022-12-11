@@ -7,17 +7,23 @@ import com.google.zxing.WriterException;
 
 public class MainApplication {
 
+	// Cabia por cada usuario
+	private static final String secretKey = "QDWSM3OYBPGTEVSPB5FKVDM3CSNCWHVK";
+
 	public static void main(String[] args) throws IOException, WriterException {
-		String secretKey = "QDWSM3OYBPGTEVSPB5FKVDM3CSNCWHVK";
 		String email = "test@gmail.com";
 		String companyName = "Awesome Company";
-		String barCodeUrl = Utils.getGoogleAuthenticatorBarCode(secretKey, email, companyName);
-		Utils.createQRCode(barCodeUrl, "QRCode.png", 400, 400);
+
+		String barCodeUrl = QRUtils.getAuthenticatorBarCode(secretKey, email, companyName);
+		QRUtils.createQRCode(barCodeUrl, "QRCode.png", 400, 400);
 
 		System.out.print("Please enter 2fA code here -> ");
 		Scanner scanner = new Scanner(System.in);
 		String code = scanner.nextLine();
-		if (code.equals(Utils.getTOTPCode(secretKey))) {
+
+		boolean isValid = Utils.isCodeValid(code, secretKey);
+
+		if (isValid) {
 			System.out.println("Logged in successfully");
 		} else {
 			System.out.println("Invalid 2FA Code");
